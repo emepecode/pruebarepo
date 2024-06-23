@@ -2,11 +2,13 @@
 const express = require("express");
 const cors = require("cors");
 const app = express();
-const port = 3000;
+const port = process.env.PORT || 3000;
 const routerApi = require("./routes")
 const {logErrors, errorHandler, boomErrorHandler} = require("./middlewares/errorHandler")
 
-const whitelist = ["http://localhost:8080", "https://myapp.co"] //lista de dominios a los cuales habilito para que me hagan req
+
+/*
+const whitelist = ["http://localhost:8080", "https://myapp.co", "http://localhost:3000"] //lista de dominios a los cuales habilito para que me hagan req
 const options = {
   origin: (origin, callback) =>{
     if(whitelist.includes(origin))
@@ -17,7 +19,10 @@ const options = {
       }
   }
 }
-app.use(cors(options)); // aceptaria cualquier origen que me haga un request, conexion con frontend
+app.use(cors(options))
+*/
+
+app.use(cors()); // aceptaria cualquier origen que me haga un request, conexion con frontend
 app.use(express.json()); //middleware
 routerApi(app);
 app.use(logErrors);
@@ -25,7 +30,7 @@ app.use(boomErrorHandler);
 app.use(errorHandler);
 
 // ruta home
-app.get("/", (req, res) => {
+app.get("/api", (req, res) => {
   res.send("Hola server en express")
 }
 )
